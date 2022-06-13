@@ -2,7 +2,10 @@
 //1. Get data
 //2. Draw Chart Dimensions
 //3. Draw image
-
+// a4. Create scales
+// 5. Draw Shapes
+// 6. Draw Axis
+// 7. Add Animation & Events
 const xAccessor = (d) => d.currently.humidity;
 const yAccessor = (d) => d.currently.apparentTemperature;
 
