@@ -26,6 +26,11 @@ async function draw() {
       `translate(${dimensions.margins}, ${dimensions.margins})`
     );
 
+  const labelsGroup = ctr.append('g').classed('bar-labels', true);
+
+  const xAxisGroup = ctr
+    .append('g')
+    .style('transform', `translateY(${dimensions.ctrHeight}px)`);
   //scales
 
   function histogram(metric) {
@@ -66,9 +71,7 @@ async function draw() {
       .attr('y', (d) => yScale(yAccessor(d)))
       .attr('fill', '#01c5c4');
     //labels
-    ctr
-      .append('g')
-      .classed('bar-labels', true)
+    labelsGroup
       .selectAll('text')
       .data(newDataset)
       .join('text')
@@ -77,9 +80,7 @@ async function draw() {
       .text(yAccessor);
 
     const xAxis = d3.axisBottom(xScale);
-    const xAxisGroup = ctr
-      .append('g')
-      .style('transform', `translateY(${dimensions.ctrHeight}px)`);
+
     xAxisGroup.call(xAxis);
   }
 
@@ -88,7 +89,7 @@ async function draw() {
     histogram(this.value);
   });
 
-  histogram('dewPoint');
+  histogram('humidity');
 }
 
 draw();
