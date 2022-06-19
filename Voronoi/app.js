@@ -126,7 +126,7 @@ async function draw() {
     .attr('y', -dimensions.margin.left + 15)
     .attr('fill', 'black')
     .html('Temperature &deg; F')
-    .style('transform', 'Rotate(270deg)')
+    .style('transform', 'rotate(270deg)')
     .style('text-anchor', 'middle');
 
   const delaunay = d3.Delaunay.from(
@@ -136,8 +136,9 @@ async function draw() {
   );
 
   const voronoi = delaunay.voronoi();
-  voronoi.ymax = dimensions.ctrHeight;
   voronoi.xmax = dimensions.ctrWidth;
+  voronoi.ymax = dimensions.ctrHeight;
+
   ctr
     .append('g')
     .selectAll('path')
@@ -149,12 +150,12 @@ async function draw() {
     .on('mouseenter', function (event, datum) {
       ctr
         .append('circle')
-        .classed('.dot-hovered', true)
+        .classed('dot-hovered', true)
         .attr('fill', '#120078')
         .attr('r', 8)
         .attr('cx', (d) => xScale(xAccessor(datum)))
         .attr('cy', (d) => yScale(yAccessor(datum)))
-        .style('pointer-event', 'none');
+        .style('pointer-events', 'none');
 
       tooltip
         .style('display', 'block')
@@ -173,7 +174,8 @@ async function draw() {
         .text(dateFormatter(datum.currently.time * 1000));
     })
     .on('mouseleave', function (event) {
-      ctr.select('dot-hover').remove();
+      ctr.select('.dot-hovered').remove();
+
       tooltip.style('display', 'none');
     });
 }
