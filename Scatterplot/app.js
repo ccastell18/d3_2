@@ -44,6 +44,8 @@ async function draw() {
       'transform',
       `translate(${dimensions.margin.left}, ${dimensions.margin.top})`
     );
+
+  const tooltip = d3.select('#tooltip');
   //nice - rounds domain decimal values
   //rangeRound - rounds the output range
   //clamp - force not to translate outside the output.
@@ -70,7 +72,30 @@ async function draw() {
     .attr('cy', (d) => yScale(yAccessor(d)))
     .attr('r', 5)
     .attr('fill', 'red')
-    .attr('data-temp', yAccessor);
+    .attr('data-temp', yAccessor)
+    .on('mouseenter', function (event, datum) {
+      d3.select(this).attr('fill', '#120078').attr('r', 8);
+
+      tooltip
+        .style('display', 'block')
+        .style('top', yScale(yAccessor(datum)) - 25 + 'px')
+        .style('left', xScale(xAccessor(datum)) + 'px');
+
+      const formatter = d3.format('.2f');
+      const dateFormatter = d3.timeFormat('%B %-d, %Y');
+
+      tooltip.select('.metric-humidity span').text(formatter(xAccessor(datum)));
+
+      tooltip.select('.metric-temp span').text(formatter(yAccessor(datum)));
+
+      tooltip
+        .select('.metric-date')
+        .text(dateFormatter(datum.currently.time * 1000));
+    })
+    .on('mouseleave', function (event) {
+      d3.select(this).attr('r', 5).attr('fill', 'red');
+      tooltip.style('display', 'none');
+    });
 
   //Axes
   const xAxis = d3
